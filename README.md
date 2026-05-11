@@ -35,8 +35,8 @@ npm run dev      # http://127.0.0.1:5173
 
 Then open the URL on a phone connected to the same Wi-Fi (you'll need HTTPS for the camera
 prompt — use a tunnel like `cloudflared tunnel --url http://127.0.0.1:5173`, or just open
-the GitHub Pages URL once the workflow has deployed). The simulated demo works fine on a
-desktop browser without any camera setup.
+the GitHub Pages URL). The simulated demo works fine on a desktop browser without any
+camera setup.
 
 To print markers: open `/tags/printable.html` from the live site, print at 100% on A4 or
 US Letter.
@@ -52,7 +52,7 @@ US Letter.
 | `npm run lint`          | ESLint + Prettier check.                                  |
 | `npm run fmt`           | Prettier write.                                           |
 | `npm run test`          | Vitest with coverage.                                     |
-| `npm run smoke`         | typecheck + lint + test + build (CI gate).                |
+| `npm run smoke`         | typecheck + lint + test + build. Run before pushing.      |
 
 ## Repository layout
 

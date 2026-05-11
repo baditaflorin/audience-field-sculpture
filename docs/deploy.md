@@ -8,8 +8,29 @@ The project ships as a fully static site on GitHub Pages from the `docs/` direct
 1. Create the repo `baditaflorin/audience-field-sculpture`.
 2. In **Settings → Pages**, set **Source** = "Deploy from a branch", **Branch** = `main`,
    **Folder** = `/docs`.
-3. The custom workflow `.github/workflows/deploy.yml` runs `npm run build` and commits the
-   refreshed `docs/` back to `main` whenever non-doc source changes land.
+
+That is the entire setup. No GitHub Actions, no deploy workflow.
+
+## Day-to-day flow
+
+Build is **local-only**. GitHub Pages serves whatever `docs/` content is in the latest
+commit on `main`; nothing builds on GitHub.
+
+```bash
+# 1. make changes under src/, public/, tests/, etc.
+# 2. validate locally — pre-commit will run lint/typecheck/test anyway
+npm run smoke
+
+# 3. stage everything, including the freshly built docs/
+git add -A
+git commit -m "feat: ..."
+
+# 4. push. Pages re-serves the new docs/ within a minute or two.
+git push
+```
+
+The Husky pre-commit hook (`.husky/pre-commit`) gates every commit on
+`lint + typecheck + test`. Running `npm run smoke` first is a habit, not a hard requirement.
 
 ## Local preview of the published build
 
@@ -45,5 +66,13 @@ check-pages-build.mjs   ← sanity-checks the build (must contain index.html, 40
 
 ## Rollback
 
-The build is committed to `main`, so rollback is `git revert` of the publish commit + push.
-Pages re-serves the previous content within a minute or two.
+The build is committed to `main`, so rollback is `git revert` of the offending commit +
+push. Pages re-serves the previous content within a minute or two.
+
+## Why no CI workflow
+
+We deliberately do not maintain a `.github/workflows/` pipeline for this repo. The
+acceptance gate (`lint + typecheck + test`) runs locally in the pre-commit hook, and the
+Pages source is whatever `docs/` is in the commit being pushed. GitHub Pages itself is
+free; GitHub Actions runs against a billed minute budget that this project does not pay
+into.
