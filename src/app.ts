@@ -44,7 +44,7 @@ export function bootstrap(): AppHandle {
 
   const audio = createAudioEngine({ initialGain: settings.volume, muted: settings.muted });
 
-  let lifecycle: Lifecycle = createLifecycle(stageFrameSize(dom));
+  let lifecycle: Lifecycle = createLifecycle(stageFrameSize(dom, settings.reduceMotion));
   let mode: Mode = 'idle';
   let raf: number | null = null;
   let camera: CameraStream | null = null;
@@ -121,7 +121,10 @@ export function bootstrap(): AppHandle {
 
   globalThis.addEventListener('resize', () => {
     resizeOverlay(dom, overlay);
-    lifecycle = createLifecycle(stageFrameSize(dom));
+    // Recreate the lifecycle with the *current* reduceMotion setting so a
+    // user who toggled the menu before resizing doesn't get their pulses
+    // back on the next viewport change.
+    lifecycle = createLifecycle(stageFrameSize(dom, settings.reduceMotion));
   });
   globalThis.addEventListener('beforeunload', () => {
     stopAll();
@@ -213,7 +216,7 @@ export function bootstrap(): AppHandle {
     if (dom.video.srcObject) {
       dom.video.srcObject = null;
     }
-    const size = stageFrameSize(dom);
+    const size = stageFrameSize(dom, settings.reduceMotion);
     simulation = createSimulation({
       width: size.frameWidth,
       height: size.frameHeight,
@@ -339,7 +342,10 @@ function resizeOverlay(dom: DomRefs, overlay: OverlayRenderer): void {
   dom.debugCanvas.hidden = false;
 }
 
-function stageFrameSize(dom: DomRefs): {
+function stageFrameSize(
+  dom: DomRefs,
+  reduceMotion: boolean
+): {
   frameWidth: number;
   frameHeight: number;
   reduceMotion: boolean;
@@ -348,7 +354,7 @@ function stageFrameSize(dom: DomRefs): {
   return {
     frameWidth: Math.max(1, Math.round(rect.width)),
     frameHeight: Math.max(1, Math.round(rect.height)),
-    reduceMotion: false,
+    reduceMotion,
   };
 }
 
