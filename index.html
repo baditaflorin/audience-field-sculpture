@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+    />
+    <meta name="theme-color" content="#0b0e1a" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="Audience Field Sculpture — a privacy-preserving browser artwork. Phones read a sculpture tag and shift visuals/audio from local viewing patterns. The camera feed never leaves the device."
+    />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <title>Audience Field Sculpture</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-chrome" role="banner">
+        <h1 class="app-title">Audience Field</h1>
+        <button type="button" id="menu-button" class="icon-button" aria-label="Open menu">
+          <span aria-hidden="true">≡</span>
+        </button>
+      </header>
+
+      <main id="stage" class="stage" aria-label="Sculpture viewer">
+        <video
+          id="camera-video"
+          class="camera-video"
+          playsinline
+          muted
+          autoplay
+          aria-hidden="true"
+        ></video>
+        <canvas id="visual-canvas" class="visual-canvas" aria-label="Visual overlay"></canvas>
+        <canvas id="debug-canvas" class="debug-canvas" hidden aria-hidden="true"></canvas>
+
+        <div id="status-pill" class="status-pill" role="status" aria-live="polite"></div>
+
+        <div id="hint" class="hint" role="status" aria-live="polite">
+          Point the camera at a sculpture tag to begin.
+        </div>
+      </main>
+
+      <section id="onboarding" class="onboarding" hidden aria-label="Onboarding">
+        <div class="onboarding-card">
+          <h2>Welcome</h2>
+          <p>
+            This artwork uses your phone's camera to detect a printed tag near a sculpture, then
+            responds with visuals and ambient sound. Nothing leaves your device.
+          </p>
+          <ul class="onboarding-bullets">
+            <li>The camera feed stays on this phone. No uploads, no analytics.</li>
+            <li>The microphone is not used.</li>
+            <li>You can close the camera at any time from the menu.</li>
+          </ul>
+          <button type="button" id="onboarding-continue" class="primary-button">
+            Use my camera
+          </button>
+          <button type="button" id="onboarding-demo" class="secondary-button">
+            Try the simulated demo first
+          </button>
+        </div>
+      </section>
+
+      <aside id="menu" class="menu" hidden aria-label="Settings &amp; actions">
+        <div class="menu-card">
+          <h2>Menu</h2>
+
+          <section class="menu-section">
+            <h3>Source</h3>
+            <button type="button" id="action-camera" class="menu-button">Use camera</button>
+            <button type="button" id="action-demo" class="menu-button">Run simulated demo</button>
+            <button type="button" id="action-stop" class="menu-button">Stop everything</button>
+          </section>
+
+          <section class="menu-section">
+            <h3>Tag</h3>
+            <label class="menu-row">
+              <span>Marker dictionary</span>
+              <select id="setting-dictionary" aria-label="Marker dictionary">
+                <option value="ARUCO_MIP_36h12">ARUCO_MIP_36h12 (recommended)</option>
+                <option value="ARUCO">Original ArUco</option>
+                <option value="ARUCO_4X4">ArUco 4x4</option>
+              </select>
+            </label>
+            <label class="menu-row">
+              <span>Expected tag ID</span>
+              <input
+                id="setting-tag-id"
+                type="number"
+                min="0"
+                step="1"
+                inputmode="numeric"
+                aria-label="Expected tag ID"
+              />
+            </label>
+            <a
+              id="tag-download"
+              class="menu-button"
+              href="./tags/printable.html"
+              target="_blank"
+              rel="noopener"
+            >
+              Open printable tags
+            </a>
+          </section>
+
+          <section class="menu-section">
+            <h3>Audio</h3>
+            <label class="menu-row">
+              <span>Volume</span>
+              <input
+                id="setting-volume"
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                aria-label="Volume"
+              />
+            </label>
+            <label class="menu-row">
+              <span>Mute</span>
+              <input id="setting-muted" type="checkbox" aria-label="Mute audio" />
+            </label>
+          </section>
+
+          <section class="menu-section">
+            <h3>Visuals</h3>
+            <label class="menu-row">
+              <span>Debug overlay</span>
+              <input id="setting-debug" type="checkbox" aria-label="Show debug overlay" />
+            </label>
+            <label class="menu-row">
+              <span>Reduce motion</span>
+              <input id="setting-reduce-motion" type="checkbox" aria-label="Reduce motion" />
+            </label>
+          </section>
+
+          <section class="menu-section">
+            <h3>Privacy</h3>
+            <p class="menu-note">
+              Camera frames are processed on this device and immediately discarded. There is no
+              server, no account, no analytics.
+            </p>
+            <button type="button" id="action-reset" class="menu-button danger">
+              Reset all settings
+            </button>
+          </section>
+
+          <section class="menu-section">
+            <h3>About</h3>
+            <ul class="menu-meta">
+              <li>Version <span id="meta-version">…</span></li>
+              <li>Commit <span id="meta-commit">…</span></li>
+              <li>Built <span id="meta-built-at">…</span></li>
+              <li>
+                <a id="meta-repo" href="#" target="_blank" rel="noopener">Source</a> ·
+                <a id="meta-privacy" href="#" target="_blank" rel="noopener">Privacy</a>
+              </li>
+            </ul>
+          </section>
+
+          <button type="button" id="menu-close" class="primary-button">Done</button>
+        </div>
+      </aside>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

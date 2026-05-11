@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy — Audience Field Sculpture</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        background: #0b0e1a;
+        color: #f5f7ff;
+        max-width: 38rem;
+        margin: 0 auto;
+        padding: 1.5rem;
+        line-height: 1.55;
+      }
+      h1 {
+        color: #9eecff;
+      }
+      h2 {
+        margin-top: 1.5rem;
+        font-size: 1.05rem;
+        color: #ff9ec4;
+      }
+      a {
+        color: #9eecff;
+      }
+      code {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.1rem 0.3rem;
+        border-radius: 0.25rem;
+      }
+      .back {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <p class="back"><a href="./">← Back to the artwork</a></p>
+    <h1>Privacy</h1>
+    <p>
+      Audience Field Sculpture is built to respond to people without watching them. This page
+      describes exactly what the artwork does and does not do with your phone.
+    </p>
+
+    <h2>What the artwork uses</h2>
+    <ul>
+      <li>
+        <strong>Camera</strong> — frames are read from your camera, analysed on this device for a
+        printed sculpture tag, and immediately discarded. They are never uploaded, stored, or sent
+        anywhere.
+      </li>
+      <li>
+        <strong>Local storage on this device</strong> — used only to remember your settings (volume,
+        expected tag id, debug toggles, etc.) so the artwork behaves the same the next time you open
+        it. Cleared by tapping <em>Reset all settings</em>.
+      </li>
+    </ul>
+
+    <h2>What the artwork does not use</h2>
+    <ul>
+      <li>No microphone. The artwork plays audio, it does not listen.</li>
+      <li>No face recognition, no biometric profiling, no identity tracking of any kind.</li>
+      <li>No analytics, no telemetry, no third-party scripts.</li>
+      <li>No accounts, no logins, no server-side database.</li>
+      <li>No GPS or location services.</li>
+      <li>No Bluetooth or peer-to-peer connection to other phones.</li>
+    </ul>
+
+    <h2>How "collective" behaviour works</h2>
+    <p>
+      The artwork is designed so that several people can experience it together near the same
+      sculpture without any of their phones communicating with each other. Each phone is
+      independent. The shared experience comes from each phone reacting to the same physical scene
+      at the same time, not from any signal exchanged between them.
+    </p>
+
+    <h2>Source code</h2>
+    <p>
+      The full source is at
+      <a href="https://github.com/baditaflorin/audience-field-sculpture"
+        >github.com/baditaflorin/audience-field-sculpture</a
+      >. The version of the artwork you are running is shown in the app's menu, with a link to the
+      exact commit it was built from.
+    </p>
+
+    <h2>Questions</h2>
+    <p>
+      If anything here is unclear, open an issue on the repository above. There is no email
+      collection on this site.
+    </p>
+  </body>
+</html>

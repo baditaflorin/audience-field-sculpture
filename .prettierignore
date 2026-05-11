@@ -1,0 +1,7 @@
+node_modules
+docs/assets
+docs/index.html
+docs/404.html
+docs/version.json
+coverage
+package-lock.json
