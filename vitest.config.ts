@@ -19,6 +19,7 @@ export default defineConfig({
         'src/primitives/persistence.ts',
         'src/primitives/clamp.ts',
         'src/primitives/result.ts',
+        'src/primitives/safe-tick.ts',
       ],
       exclude: ['src/**/*.test.ts'],
       thresholds: {
