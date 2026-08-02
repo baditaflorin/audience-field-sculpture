@@ -6,6 +6,7 @@ import { createSimulation, type Simulation } from './application/simulation.js';
 import { createLifecycle, type Lifecycle } from './application/lifecycle.js';
 import { createSettingsStore } from './application/settings.js';
 import type { Settings } from './application/settings.js';
+import { runFrame } from './primitives/safe-tick.js';
 import type { FrameSample } from './types/domain.js';
 import { createOverlay, type OverlayRenderer } from './ui/overlay.js';
 import { createStatusController, type StatusController } from './ui/status.js';
@@ -261,16 +262,41 @@ export function bootstrap(): AppHandle {
     if (raf !== null) return;
     const tick = (nowMs: number): void => {
       raf = null;
-      const sample = nextSample(nowMs);
-      const snapshot = lifecycle.observe(sample);
-      audio.apply(snapshot.audio);
-      overlay.render(snapshot, nowMs);
-      maybeUpdateLiveStatus(snapshot.detection !== null);
+      const result = runFrame(() => {
+        const sample = nextSample(nowMs);
+        const snapshot = lifecycle.observe(sample);
+        audio.apply(snapshot.audio);
+        overlay.render(snapshot, nowMs);
+        maybeUpdateLiveStatus(snapshot.detection !== null);
+      });
+      if (!result.ok) {
+        onFrameError(result.error);
+        return;
+      }
       if (mode !== 'idle') {
         raf = globalThis.requestAnimationFrame(tick);
       }
     };
     raf = globalThis.requestAnimationFrame(tick);
+  }
+
+  // A single bad frame (a third-party detector throwing on a malformed camera frame, a lost
+  // canvas context, ...) must not silently freeze the artwork forever. Stop cleanly, surface
+  // a persistent error the viewer can actually act on, and never re-schedule the loop.
+  function onFrameError(error: unknown): void {
+    console.error(
+      'audience-field-sculpture: frame processing failed; stopping to avoid a silent freeze.',
+      error
+    );
+    if (!runFrame(stopAll).ok) {
+      // stopAll() itself is not expected to throw, but if it does, at minimum make sure the
+      // loop cannot be mistaken for still running.
+      mode = 'idle';
+      raf = null;
+    }
+    status.show('Something went wrong while reading the tag. Tap the menu to restart.', 'error', {
+      autoHideMs: 0,
+    });
   }
 
   function nextSample(timestamp: number): FrameSample {
