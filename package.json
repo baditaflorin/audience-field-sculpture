@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "js-aruco2": "^2.0.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
